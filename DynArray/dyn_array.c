@@ -6,6 +6,20 @@
 
 /*
  * generate a dynamic 2-dim array
+ * row and col are both not fixed
+ * */
+int dyn_2arr(int *** arr, int col, int row)
+{
+	int i;
+	*arr = malloc(sizeof(int *) * row);
+	for (i = 0; i < row; i++)
+		*(*arr + i) = malloc(sizeof(int) * col);
+
+	return 0;
+}
+
+/*
+ * generate a dynamic 2-dim array
  * The row number is offered by the user
  * The col number is fixed.
  * */
@@ -48,5 +62,12 @@ int main()
 	col_arr[4][19] = 29;
 	printf("%d %d\n", col_arr[0][0], col_arr[4][19]);
 
+	/* test for dyn_array */
+	int ** arr;
+	dyn_2arr(&arr, 4, 5);
+	arr[0][0] = 23;
+	arr[3][4] = 22;
+	printf("%d %d\n", arr[0][0], arr[3][4]);
+	
 	return 0;
 }
