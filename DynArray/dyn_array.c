@@ -24,12 +24,6 @@ int colfix_array(int (** col_arr)[COL], int row)
 int rowfix_array(int * row_arr[], int col[])
 {
 	int i;
-
-	if (row_arr == NULL) {
-		fprintf(stderr, "row_arr is NULL!\n");
-		exit(EXIT_FAILURE);
-	}
-
 	for (i = 0; i < ROW; i++) {
 		row_arr[i] = malloc(sizeof(int) * col[i]);
 	}
