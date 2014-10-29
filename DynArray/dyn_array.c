@@ -6,6 +6,18 @@
 
 /*
  * generate a dynamic 2-dim array
+ * The row number is offered by the user
+ * The col number is fixed.
+ * */
+int colfix_array(int (** col_arr)[COL], int row)
+{
+	*col_arr = malloc(sizeof(int (*)[COL]) * row);
+
+	return 0;
+}
+
+/*
+ * generate a dynamic 2-dim array
  * The row number is fixed.
  * The col number is offered by the user
  * */
@@ -35,6 +47,12 @@ int main()
 	row_arr[4][4] = 91;
 	printf("%d %d\n", row_arr[1][2], row_arr[4][4]);
 
-	/* rowfix_array(NULL, col); */
+	/* test for colfix_array */
+	int (* col_arr)[COL];
+	colfix_array(&col_arr, 5);
+	col_arr[0][0] = 42;
+	col_arr[4][19] = 29;
+	printf("%d %d\n", col_arr[0][0], col_arr[4][19]);
+
 	return 0;
 }
