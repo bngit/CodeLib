@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
 #define ROW 5
 #define COL 20
@@ -45,6 +46,52 @@ int rowfix_array(int * row_arr[], int col[])
 	return 0;
 }
 
+/*
+ * generate a multidimensional array
+ * */
+static int stmuti_arr(void ** arr, int n,  va_list ap)
+{
+	int size;
+	int i;
+	if (n <= 0) {
+		*arr = NULL;
+		return 0;
+	}
+	if ( n == 1) {
+		*arr = malloc(sizeof(int) * va_arg(ap, int));
+		return 0;
+	}
+	if (n == 2) {
+		dyn_2arr((int ***)arr, va_arg(ap, int), va_arg(ap, int));
+		return 0;
+	}
+	size = va_arg(ap, int);
+	*arr = malloc(sizeof(void *) * size);
+	va_list ap0;
+	va_copy(ap0, ap);  // for C99 only
+	for (i = 0; i < size; i++) {
+		va_copy(ap, ap0);
+		stmuti_arr(*arr + i * sizeof(void *), n-1, ap);
+	}
+
+	return 0;
+}
+
+/*
+ * generate a Multidimensional array
+ * n --- the dimension number
+ * ... --- the value of 1,2,3.. dimensions
+ * */
+int muti_arr(void * arr, int n, ...)
+{
+	va_list ap;
+	va_start(ap, n);
+	stmuti_arr(arr, n, ap);
+	va_end(ap);
+	return 0;
+}
+
+
 int main()
 {
 	/* test for rowfix_array */
@@ -69,5 +116,11 @@ int main()
 	arr[3][4] = 22;
 	printf("%d %d\n", arr[0][0], arr[3][4]);
 	
+	/* test for muti_arr */
+	int ***** marr;
+	muti_arr(&marr, 5, 3, 4, 5, 2, 23);
+	marr[2][3][4][1][22] = 23;
+	printf("%d\n", marr[2][3][4][1][22]);
+
 	return 0;
 }
