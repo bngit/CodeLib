@@ -3,6 +3,7 @@
 #include <stdarg.h>
 
 #include "func.h"
+#include "general_func.h"
 
 int main()
 {
@@ -34,5 +35,20 @@ int main()
 	marr[2][3][4][1][22] = 23;
 	printf("%d\n", marr[2][3][4][1][22]);
 
+	/* test for ndimalloc */
+	int * nnarr;
+	nnarr = ndimalloc(sizeof(int), 1, 23);
+	nnarr[22] = 234;
+	printf("%d\n", nnarr[22]);
+
+	int *** n2dimarr;
+	n2dimarr = ndimalloc(sizeof(int), 3, 3, 4, 1);
+	n2dimarr[2][3][0] = 123;
+	printf("%d\n", n2dimarr[2][3][0]);
+	/*int ****** ndimarr;
+	ndimarr = ndimalloc(sizeof(int), 6, 3, 4, 2, 3, 3, 4);
+	ndimarr[2][3][1][2][2][3] = 23;
+	printf("%d\n", ndimarr[2][3][1][2][2][3]);
+	*/
 	return 0;
 }

@@ -1,5 +1,5 @@
-OBJ = dyn_array.o func.o
-DEPS = func.h
+OBJ = dyn_array.o func.o general_func.o
+DEPS = func.h general_func.h
 TARGET = a.out
 
 CC = gcc
