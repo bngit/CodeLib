@@ -29,10 +29,8 @@ void * ndimalloc(size_t size, size_t dim, ...)
  * */
 static void * recursive_alloc(size_t size, size_t dim, va_list ap)
 {
-	size_t firstdim = va_arg(ap, size_t);
-	/*fprintf(stderr, "size=%lu, dim=%lu, firstdim=%lu\n", \
-			size, dim, firstdim);
-*/
+	/* here TYPE we think is "int" */
+	size_t firstdim = va_arg(ap, int);
 	if (dim == 0)
 		return NULL;
 	if (dim == 1) {

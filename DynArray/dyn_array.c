@@ -45,10 +45,10 @@ int main()
 	n2dimarr = ndimalloc(sizeof(int), 3, 3, 4, 1);
 	n2dimarr[2][3][0] = 123;
 	printf("%d\n", n2dimarr[2][3][0]);
-	/*int ****** ndimarr;
-	ndimarr = ndimalloc(sizeof(int), 6, 3, 4, 2, 3, 3, 4);
-	ndimarr[2][3][1][2][2][3] = 23;
-	printf("%d\n", ndimarr[2][3][1][2][2][3]);
-	*/
+	int ******* ndimarr;
+	ndimarr = ndimalloc(sizeof(int), 7, 3, 4, 2, 23, 3, 4, 3);
+	ndimarr[2][3][1][22][2][3][2] = 23;
+	printf("%d\n", ndimarr[2][3][1][22][2][3][2]);
+	
 	return 0;
 }
