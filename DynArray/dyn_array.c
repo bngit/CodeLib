@@ -35,20 +35,24 @@ int main()
 	marr[2][3][4][1][22] = 23;
 	printf("%d\n", marr[2][3][4][1][22]);
 
-	/* test for ndimalloc */
+	/* test for ndimalloc & ndimfree */
 	int * nnarr;
 	nnarr = ndimalloc(sizeof(int), 1, 23);
 	nnarr[22] = 234;
 	printf("%d\n", nnarr[22]);
+	ndimfree(nnarr, 1, 23);
 
-	int *** n2dimarr;
-	n2dimarr = ndimalloc(sizeof(int), 3, 3, 4, 1);
-	n2dimarr[2][3][0] = 123;
-	printf("%d\n", n2dimarr[2][3][0]);
+	int ** n2dimarr;
+	n2dimarr = ndimalloc(sizeof(int), 2, 2, 3);
+	n2dimarr[1][2] = 123;
+	printf("%d\n", n2dimarr[1][2]);
+	ndimfree(n2dimarr, 2, 2, 3);
+
 	int ******* ndimarr;
-	ndimarr = ndimalloc(sizeof(int), 7, 3, 4, 2, 23, 3, 4, 3);
-	ndimarr[2][3][1][22][2][3][2] = 23;
-	printf("%d\n", ndimarr[2][3][1][22][2][3][2]);
-	
+	ndimarr = ndimalloc(sizeof(int), 7, 3, 4, 2, 4, 3, 4, 3);
+	ndimarr[2][3][1][3][2][3][2] = 23;
+	printf("%d\n", ndimarr[2][3][1][3][2][3][2]);
+	ndimfree(ndimarr, 7, 3, 4, 2, 4, 3, 4, 3);
+
 	return 0;
 }

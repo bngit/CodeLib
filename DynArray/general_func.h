@@ -16,4 +16,9 @@
  * */
 void * ndimalloc(size_t size, size_t dim, ...);
 
+/*
+ * free the memory allocated
+ * */
+void ndimfree(void * ptr, size_t dim, ...);
+
 #endif /* GENERAL_FUNC_H */
