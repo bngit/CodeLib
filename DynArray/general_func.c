@@ -2,16 +2,33 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <string.h>
 
 #include "general_func.h"
 
 /*
+ * return proper data according to the 'format' string
+ * */
+size_t format_arg(va_list ap, char * format)
+{
+	if (strcmp(format, "d") == 0) return va_arg(ap, int);
+	if (strcmp(format, "ld") == 0) return va_arg(ap, long);
+	if (strcmp(format, "lld") == 0) return va_arg(ap, long long);
+	if (strcmp(format, "u") == 0) return va_arg(ap, unsigned);
+	if (strcmp(format, "lu") == 0) return va_arg(ap, long unsigned);
+	if (strcmp(format, "llu") == 0) return va_arg(ap, long long unsigned);
+	fprintf(stderr, "ndimalloc/ndimfree: can't accept this format!\n");
+	exit(EXIT_FAILURE);
+}
+
+/*
  * Recursive implement of the multidimensional array
  * */
-static void * recursive_alloc(size_t size, size_t dim, va_list ap)
+static void * recursive_alloc(size_t size, size_t dim, 
+		char * format, va_list ap)
 {
 	/* here TYPE we think is "int" */
-	int firstdim = va_arg(ap, int);
+	size_t firstdim = format_arg(ap, format);
 	if (dim == 0)
 		return NULL;
 	if (dim == 1) {
@@ -23,7 +40,7 @@ static void * recursive_alloc(size_t size, size_t dim, va_list ap)
 	va_copy(ap0, ap);
 	for (int i = 0; i < firstdim; i++) {
 		va_copy(ap, ap0);
-		ret[i] = recursive_alloc(size, dim-1, ap);
+		ret[i] = recursive_alloc(size, dim-1, format, ap);
 	}
 	return ret;
 }
@@ -31,7 +48,7 @@ static void * recursive_alloc(size_t size, size_t dim, va_list ap)
 /*
  * Recursive implement of the free function
  * */
-static void recursive_free(void * ptr, int dim, va_list ap)
+static void recursive_free(void * ptr, int dim, char * format, va_list ap)
 {
 	if (dim == 0)
 		return;
@@ -39,13 +56,13 @@ static void recursive_free(void * ptr, int dim, va_list ap)
 		free(ptr);
 		return;
 	}
-	int firstdim = va_arg(ap, int);
+	int firstdim = format_arg(ap, format);
 	va_list ap0;
 	va_copy(ap0, ap);
 	void ** pcon = ptr;
 	for (int i = 0; i < firstdim; i++) {
 		va_copy(ap, ap0);
-		recursive_free(pcon[i], dim-1, ap);
+		recursive_free(pcon[i], dim-1, format, ap);
 	}
 	free(ptr);
 }
@@ -53,11 +70,11 @@ static void recursive_free(void * ptr, int dim, va_list ap)
 /*
  * free the memory allocated
  * */
-void ndimfree(void * ptr, size_t dim, ...)
+void ndimfree(void * ptr, size_t dim, char * format, ...)
 {
 	va_list ap;
-	va_start(ap, dim);
-	recursive_free(ptr, dim, ap);
+	va_start(ap, format);
+	recursive_free(ptr, dim, format, ap);
 	va_end(ap);
 }
 /*
@@ -65,13 +82,13 @@ void ndimfree(void * ptr, size_t dim, ...)
  * a pointer to that array. THe array elements are "size"
  * bytes.
  * */
-void * ndimalloc(size_t size, size_t dim, ...)
+void * ndimalloc(size_t size, size_t dim, char * format, ...)
 {
 	va_list ap;
 	void * ret;
 
-	va_start(ap,dim);
-	ret = recursive_alloc(size, dim, ap);
+	va_start(ap,format);
+	ret = recursive_alloc(size, dim, format, ap);
 	va_end(ap);
 	
 	return ret;
