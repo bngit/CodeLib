@@ -1,7 +1,5 @@
-CodePractice
+Code Storage
 ============
-
-(For backup only) coding practice 
 
 DynArray : implement the dynamic array in C.
 
