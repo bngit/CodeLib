@@ -46,14 +46,15 @@ if [ "$delete_flag" = true ]; then
 fi
 
 # check ctags
-if command -v unictags > /dev/null 2>&1; then
-    CTAGS=unictags
-elif command -v ctags > /dev/null 2>&1; then
-    CTAGS=ctags
-else
-    echo >&2 "Require ctags but it's not installed.  Aborting."
-    exit 1
-fi
+# if command -v unictags > /dev/null 2>&1; then
+#     CTAGS=unictags
+# elif command -v ctags > /dev/null 2>&1; then
+#     CTAGS=ctags
+# else
+#     echo >&2 "Require ctags but it's not installed.  Aborting."
+#     exit 1
+# fi
+CTAGS=ctags
 
 # check cscope
 if command -v cscope > /dev/null 2>&1; then
@@ -64,14 +65,14 @@ else
 fi
 
 echo -e 'Generate cscope library'
-find $PWD -type f -iname "*.cpp" -or -name "*.h" \
-    | grep -iv "_test\|_mock\|mock" > cscope.files
+find $PWD -type f -iname "*.cpp" -or -name "*.h" -or -name "*.txt"\
+    | grep -iv "_test\|_mock\|mock\|\.git" > cscope.files
 
 # -b: just build
 $CSCOPE -b -k -q
 
 echo -e 'Generate tags files'
-$CTAGS -R --c++-kinds=+p --fields=+iaS --extra=+fq .
+$CTAGS -R --c++-kinds=+p --fields=+iaS --extras=+fq .
 
 echo "-----OK!------"
 exit 0
